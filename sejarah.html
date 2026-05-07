@@ -1,0 +1,1657 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PETA — Pembela Tanah Air</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Special+Elite&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Cinzel+Decorative:wght@700&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    /* ============================================================
+       CSS CUSTOM PROPERTIES — Palet Warna & Tipografi
+    ============================================================ */
+    :root {
+      --olive-dark:   #3b4a2f;
+      --olive-mid:    #5a6e40;
+      --olive-light:  #8a9e62;
+      --parchment:    #e8d9b0;
+      --parchment-dark: #c9b882;
+      --cream:        #f5ecd0;
+      --blood-red:    #8b1a1a;
+      --red-bright:   #c0392b;
+      --charcoal:     #1a1a14;
+      --black:        #0d0d08;
+      --gold:         #c8a94a;
+      --ink:          #2c2416;
+    }
+
+    /* ============================================================
+       BASE & RESET
+    ============================================================ */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Courier Prime', monospace;
+      background-color: var(--olive-dark);
+      color: var(--ink);
+      overflow-x: hidden;
+      cursor: default;
+    }
+
+    /* ============================================================
+       MAP-TEXTURE OVERLAY — Efek Peta Tua
+    ============================================================ */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E"),
+        repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 60px,
+          rgba(90,110,64,0.04) 60px,
+          rgba(90,110,64,0.04) 61px
+        ),
+        repeating-linear-gradient(
+          90deg,
+          transparent,
+          transparent 60px,
+          rgba(90,110,64,0.04) 60px,
+          rgba(90,110,64,0.04) 61px
+        );
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ============================================================
+       TYPOGRAPHY HELPERS
+    ============================================================ */
+    .font-title   { font-family: 'Cinzel Decorative', serif; }
+    .font-display { font-family: 'IM Fell English', serif; }
+    .font-stamp   { font-family: 'Special Elite', cursive; }
+    .font-mono    { font-family: 'Courier Prime', monospace; }
+
+    /* ============================================================
+       PARCHMENT SECTION — Background Kertas Tua
+    ============================================================ */
+    .parchment-bg {
+      background-color: var(--cream);
+      background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0.3'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.12'/%3E%3C/svg%3E"),
+        radial-gradient(ellipse at 20% 30%, rgba(200,169,74,0.15) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 70%, rgba(139,26,26,0.08) 0%, transparent 50%);
+      position: relative;
+    }
+
+    /* ============================================================
+       TORN-EDGE — Efek Tepi Kertas Robek
+    ============================================================ */
+    .torn-top::before,
+    .torn-bottom::after {
+      content: '';
+      display: block;
+      width: 100%;
+      height: 24px;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 24'%3E%3Cpath d='M0,12 C50,0 80,24 120,12 C160,0 200,20 240,12 C280,4 310,22 360,12 C400,2 440,20 480,12 C510,4 550,22 600,12 C640,2 680,20 720,12 C760,4 800,22 840,12 C880,2 920,20 960,12 C1000,4 1040,22 1080,12 C1120,2 1160,20 1200,12 L1200,24 L0,24 Z' fill='%23f5ecd0'/%3E%3C/svg%3E");
+      background-size: cover;
+    }
+
+    .torn-top::before { transform: rotate(180deg); }
+
+    /* ============================================================
+       NAV BAR — Navigasi Militer
+    ============================================================ */
+    #navbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      background: linear-gradient(180deg, rgba(26,26,20,0.97) 0%, rgba(59,74,47,0.97) 100%);
+      border-bottom: 2px solid var(--gold);
+      backdrop-filter: blur(4px);
+      transition: all 0.3s ease;
+    }
+
+    .nav-link {
+      color: var(--parchment);
+      font-family: 'Special Elite', cursive;
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.5rem 0.75rem;
+      border: 1px solid transparent;
+      transition: all 0.25s ease;
+      white-space: nowrap;
+    }
+
+    .nav-link:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+      background: rgba(200,169,74,0.1);
+    }
+
+    /* ============================================================
+       HERO SECTION
+    ============================================================ */
+    #hero {
+      min-height: 100vh;
+      background:
+        radial-gradient(ellipse at center top, rgba(90,110,64,0.6) 0%, transparent 70%),
+        linear-gradient(180deg, var(--charcoal) 0%, var(--olive-dark) 50%, var(--black) 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 6rem 1.5rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Dekoratif lingkaran peta di belakang hero */
+    #hero::before {
+      content: '';
+      position: absolute;
+      width: min(700px, 100vw);
+      height: min(700px, 100vw);
+      border: 1px solid rgba(200,169,74,0.12);
+      border-radius: 50%;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      box-shadow:
+        0 0 0 40px rgba(200,169,74,0.04),
+        0 0 0 80px rgba(200,169,74,0.03),
+        0 0 0 120px rgba(200,169,74,0.02);
+    }
+
+    .hero-logo-ring {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      border: 3px solid var(--gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle, rgba(59,74,47,0.8) 0%, rgba(26,26,20,0.95) 100%);
+      box-shadow:
+        0 0 0 6px rgba(200,169,74,0.2),
+        0 0 40px rgba(200,169,74,0.15),
+        inset 0 0 30px rgba(200,169,74,0.05);
+      margin-bottom: 2rem;
+      animation: logoReveal 1.2s ease forwards;
+      position: relative;
+      z-index: 2;
+    }
+
+    @keyframes logoReveal {
+      from { opacity: 0; transform: scale(0.6) rotate(-10deg); }
+      to   { opacity: 1; transform: scale(1) rotate(0deg); }
+    }
+
+    .logo-svg text { fill: var(--gold); }
+
+    .hero-title {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(2.5rem, 8vw, 5.5rem);
+      color: var(--parchment);
+      letter-spacing: 0.05em;
+      line-height: 1.1;
+      text-shadow: 0 0 40px rgba(200,169,74,0.3), 2px 2px 0 var(--black);
+      animation: titleDrop 1s 0.3s ease both;
+      position: relative; z-index: 2;
+    }
+
+    .hero-subtitle {
+      font-family: 'Special Elite', cursive;
+      font-size: clamp(0.85rem, 2.5vw, 1.1rem);
+      color: var(--gold);
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      margin: 0.75rem 0 1.5rem;
+      animation: titleDrop 1s 0.5s ease both;
+      position: relative; z-index: 2;
+    }
+
+    .hero-definition {
+      font-family: 'IM Fell English', serif;
+      font-size: clamp(1rem, 2.5vw, 1.25rem);
+      color: var(--parchment-dark);
+      max-width: 680px;
+      line-height: 1.8;
+      animation: titleDrop 1s 0.7s ease both;
+      position: relative; z-index: 2;
+    }
+
+    @keyframes titleDrop {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .scroll-indicator {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--gold);
+      font-family: 'Special Elite', cursive;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      animation: bounce 2s infinite;
+      z-index: 2;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50%       { transform: translateX(-50%) translateY(8px); }
+    }
+
+    /* ============================================================
+       SECTION TITLE — Heading Bergaya Militer
+    ============================================================ */
+    .section-title {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(1.4rem, 4vw, 2.2rem);
+      color: var(--blood-red);
+      text-align: center;
+      position: relative;
+      padding-bottom: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .section-title::before,
+    .section-title::after {
+      content: '✦';
+      color: var(--gold);
+      font-size: 0.9em;
+      margin: 0 0.75rem;
+    }
+
+    .section-title-line {
+      width: 80px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      margin: 0.5rem auto 0;
+    }
+
+    /* ============================================================
+       CLICK-TO-REVEAL CARDS
+    ============================================================ */
+    .reveal-card {
+      background: linear-gradient(135deg, rgba(245,236,208,0.95) 0%, rgba(232,217,176,0.9) 100%);
+      border: 1px solid var(--parchment-dark);
+      border-left: 4px solid var(--olive-mid);
+      border-radius: 4px;
+      padding: 1rem 1.25rem;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .reveal-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(135deg, rgba(90,110,64,0.05) 0%, transparent 100%);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .reveal-card:hover { 
+      border-left-color: var(--blood-red);
+      transform: translateX(4px);
+      box-shadow: -4px 0 12px rgba(139,26,26,0.2), 4px 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .reveal-card:hover::before { opacity: 1; }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .card-question {
+      font-family: 'Special Elite', cursive;
+      font-size: 0.95rem;
+      color: var(--ink);
+      letter-spacing: 0.02em;
+    }
+
+    .card-toggle {
+      font-size: 1.4rem;
+      color: var(--blood-red);
+      transition: transform 0.35s ease;
+      flex-shrink: 0;
+      line-height: 1;
+    }
+
+    .reveal-card.open .card-toggle { transform: rotate(45deg); }
+
+    .card-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s cubic-bezier(0.4,0,0.2,1), opacity 0.4s ease, padding 0.3s;
+      opacity: 0;
+      padding-top: 0;
+    }
+
+    .reveal-card.open .card-body {
+      max-height: 600px;
+      opacity: 1;
+      padding-top: 0.875rem;
+    }
+
+    .card-body p {
+      font-family: 'IM Fell English', serif;
+      font-size: 0.95rem;
+      line-height: 1.8;
+      color: #2c2416;
+      border-top: 1px dashed var(--parchment-dark);
+      padding-top: 0.875rem;
+    }
+
+    /* ============================================================
+       RANK / JABATAN CARDS
+    ============================================================ */
+    .rank-card {
+      background: linear-gradient(160deg, var(--olive-dark) 0%, var(--olive-mid) 100%);
+      border: 1px solid var(--olive-light);
+      border-radius: 6px;
+      padding: 1.25rem;
+      text-align: center;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .rank-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(200,169,74,0.1) 0%, transparent 60%);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .rank-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 24px rgba(0,0,0,0.4);
+      border-color: var(--gold);
+    }
+
+    .rank-card:hover::after { opacity: 1; }
+
+    .rank-badge {
+      width: 60px; height: 60px;
+      border-radius: 50%;
+      border: 2px solid var(--gold);
+      background: rgba(200,169,74,0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 0.75rem;
+      font-size: 1.6rem;
+    }
+
+    .rank-title {
+      font-family: 'Special Elite', cursive;
+      font-size: 1rem;
+      color: var(--gold);
+      letter-spacing: 0.05em;
+      margin-bottom: 0.25rem;
+    }
+
+    .rank-translation {
+      font-family: 'IM Fell English', serif;
+      font-style: italic;
+      font-size: 0.8rem;
+      color: var(--parchment-dark);
+      margin-bottom: 0.5rem;
+    }
+
+    .rank-desc {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.75rem;
+      color: var(--parchment);
+      line-height: 1.6;
+    }
+
+    /* ============================================================
+       TIMELINE — Perlawanan PETA
+    ============================================================ */
+    .timeline-container {
+      position: relative;
+      padding-left: 2rem;
+    }
+
+    .timeline-container::before {
+      content: '';
+      position: absolute;
+      left: 10px;
+      top: 0; bottom: 0;
+      width: 2px;
+      background: linear-gradient(180deg, var(--gold) 0%, var(--blood-red) 100%);
+    }
+
+    .timeline-item {
+      position: relative;
+      margin-bottom: 1.5rem;
+      cursor: pointer;
+    }
+
+    .timeline-dot {
+      position: absolute;
+      left: -1.75rem;
+      top: 0.9rem;
+      width: 16px; height: 16px;
+      border-radius: 50%;
+      background: var(--blood-red);
+      border: 2px solid var(--gold);
+      transition: all 0.3s ease;
+      z-index: 1;
+    }
+
+    .timeline-item:hover .timeline-dot,
+    .timeline-item.open .timeline-dot {
+      background: var(--gold);
+      box-shadow: 0 0 12px rgba(200,169,74,0.6);
+      transform: scale(1.3);
+    }
+
+    .timeline-header {
+      background: linear-gradient(135deg, rgba(245,236,208,0.95), rgba(232,217,176,0.9));
+      border: 1px solid var(--parchment-dark);
+      border-left: 4px solid var(--blood-red);
+      padding: 0.875rem 1rem;
+      border-radius: 4px;
+      transition: all 0.25s;
+    }
+
+    .timeline-item:hover .timeline-header,
+    .timeline-item.open .timeline-header {
+      border-left-color: var(--gold);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    .timeline-year {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 0.8rem;
+      color: var(--blood-red);
+      letter-spacing: 0.1em;
+    }
+
+    .timeline-event {
+      font-family: 'Special Elite', cursive;
+      font-size: 1rem;
+      color: var(--ink);
+    }
+
+    .timeline-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s cubic-bezier(0.4,0,0.2,1), opacity 0.4s;
+      opacity: 0;
+      background: rgba(245,236,208,0.7);
+      border: 1px solid var(--parchment-dark);
+      border-top: none;
+      border-radius: 0 0 4px 4px;
+      padding: 0 1rem;
+    }
+
+    .timeline-item.open .timeline-body {
+      max-height: 500px;
+      opacity: 1;
+      padding: 1rem;
+    }
+
+    .timeline-body p {
+      font-family: 'IM Fell English', serif;
+      font-size: 0.95rem;
+      line-height: 1.8;
+      color: var(--ink);
+    }
+
+    /* ============================================================
+       STAMP DECORATION
+    ============================================================ */
+    .stamp {
+      display: inline-block;
+      border: 3px solid var(--blood-red);
+      padding: 0.5rem 1rem;
+      font-family: 'Special Elite', cursive;
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--blood-red);
+      transform: rotate(-3deg);
+      opacity: 0.8;
+      margin: 1rem auto;
+    }
+
+    /* ============================================================
+       QUIZ COMPONENT
+    ============================================================ */
+    #quiz-section {
+      background: linear-gradient(180deg, var(--charcoal) 0%, #0f1a0c 100%);
+      padding: 5rem 1.5rem;
+      position: relative;
+    }
+
+    #quiz-section::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 40px,
+        rgba(90,110,64,0.05) 40px,
+        rgba(90,110,64,0.05) 41px
+      );
+      pointer-events: none;
+    }
+
+    .quiz-container {
+      max-width: 720px;
+      margin: 0 auto;
+      background: linear-gradient(160deg, rgba(245,236,208,0.97) 0%, rgba(221,203,155,0.97) 100%);
+      border: 2px solid var(--gold);
+      border-radius: 8px;
+      padding: 2rem;
+      box-shadow: 0 0 0 4px rgba(200,169,74,0.15), 0 20px 60px rgba(0,0,0,0.5);
+      position: relative;
+    }
+
+    .quiz-container::before {
+      content: 'RAHASIA MILITER';
+      position: absolute;
+      top: 1rem; right: 1.5rem;
+      font-family: 'Special Elite', cursive;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      color: var(--blood-red);
+      opacity: 0.4;
+      transform: rotate(5deg);
+    }
+
+    .quiz-progress-bar {
+      height: 6px;
+      background: rgba(59,74,47,0.2);
+      border-radius: 99px;
+      margin-bottom: 1.5rem;
+      overflow: hidden;
+    }
+
+    .quiz-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--olive-mid), var(--gold));
+      border-radius: 99px;
+      transition: width 0.5s ease;
+    }
+
+    .quiz-question-num {
+      font-family: 'Special Elite', cursive;
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      color: var(--olive-mid);
+      margin-bottom: 0.5rem;
+    }
+
+    .quiz-question-text {
+      font-family: 'IM Fell English', serif;
+      font-size: 1.1rem;
+      line-height: 1.7;
+      color: var(--ink);
+      margin-bottom: 1.5rem;
+      min-height: 3.5rem;
+    }
+
+    .quiz-option {
+      display: block;
+      width: 100%;
+      text-align: left;
+      padding: 0.7rem 1rem;
+      margin-bottom: 0.6rem;
+      background: rgba(255,255,255,0.5);
+      border: 1px solid var(--parchment-dark);
+      border-radius: 4px;
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.9rem;
+      color: var(--ink);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .quiz-option:hover:not(:disabled) {
+      background: rgba(90,110,64,0.15);
+      border-color: var(--olive-mid);
+      transform: translateX(4px);
+    }
+
+    .quiz-option.correct {
+      background: rgba(74,140,74,0.25);
+      border-color: #4a8c4a;
+      color: #1a4a1a;
+      font-weight: 700;
+    }
+
+    .quiz-option.wrong {
+      background: rgba(139,26,26,0.15);
+      border-color: var(--blood-red);
+      color: var(--blood-red);
+    }
+
+    .quiz-option:disabled { cursor: default; }
+
+    .quiz-feedback {
+      margin-top: 0.75rem;
+      padding: 0.6rem 0.875rem;
+      border-radius: 4px;
+      font-family: 'IM Fell English', serif;
+      font-size: 0.9rem;
+      font-style: italic;
+      display: none;
+    }
+
+    .quiz-feedback.show { display: block; }
+    .quiz-feedback.correct { background: rgba(74,140,74,0.15); color: #2a5a2a; border-left: 3px solid #4a8c4a; }
+    .quiz-feedback.wrong   { background: rgba(139,26,26,0.12); color: var(--blood-red); border-left: 3px solid var(--blood-red); }
+
+    .btn-next {
+      margin-top: 1rem;
+      padding: 0.7rem 2rem;
+      background: linear-gradient(135deg, var(--olive-dark) 0%, var(--olive-mid) 100%);
+      color: var(--parchment);
+      border: 1px solid var(--gold);
+      border-radius: 4px;
+      font-family: 'Special Elite', cursive;
+      font-size: 0.85rem;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      transition: all 0.25s;
+      display: none;
+    }
+
+    .btn-next:hover {
+      background: linear-gradient(135deg, var(--olive-mid) 0%, var(--gold) 100%);
+      color: var(--charcoal);
+      box-shadow: 0 4px 12px rgba(200,169,74,0.3);
+    }
+
+    .btn-next.show { display: inline-block; }
+
+    /* Result */
+    #quiz-result {
+      text-align: center;
+      display: none;
+      animation: fadeIn 0.6s ease;
+    }
+
+    #quiz-result.show { display: block; }
+
+    .result-score {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(3rem, 10vw, 5rem);
+      color: var(--blood-red);
+      line-height: 1;
+    }
+
+    .result-message {
+      font-family: 'IM Fell English', serif;
+      font-size: 1.15rem;
+      line-height: 1.8;
+      margin: 1rem 0 1.5rem;
+      color: var(--ink);
+    }
+
+    .btn-reset {
+      padding: 0.7rem 2rem;
+      background: var(--blood-red);
+      color: var(--parchment);
+      border: none;
+      border-radius: 4px;
+      font-family: 'Special Elite', cursive;
+      font-size: 0.85rem;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      transition: all 0.25s;
+    }
+
+    .btn-reset:hover { background: #6b1010; box-shadow: 0 4px 12px rgba(139,26,26,0.4); }
+
+    /* ============================================================
+       FOOTER
+    ============================================================ */
+    footer {
+      background: var(--black);
+      border-top: 1px solid var(--gold);
+      text-align: center;
+      padding: 2rem;
+      font-family: 'Special Elite', cursive;
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      color: rgba(200,169,74,0.5);
+    }
+
+    /* ============================================================
+       UTILITY ANIMATIONS
+    ============================================================ */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Responsive override */
+    @media (max-width: 640px) {
+      .timeline-container { padding-left: 1.5rem; }
+      .timeline-dot { left: -1.25rem; }
+    }
+
+    /* Placeholder image style */
+    .img-placeholder {
+      background: linear-gradient(135deg, var(--olive-dark) 0%, var(--charcoal) 100%);
+      border: 1px solid var(--olive-light);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      color: var(--parchment-dark);
+      font-family: 'Special Elite', cursive;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-align: center;
+      padding: 1rem;
+    }
+
+    /* Decorative corner marks */
+    .corner-mark {
+      position: absolute;
+      width: 20px; height: 20px;
+      border-color: var(--gold);
+      border-style: solid;
+      opacity: 0.5;
+    }
+
+    .corner-mark.tl { top: 8px; left: 8px;  border-width: 2px 0 0 2px; }
+    .corner-mark.tr { top: 8px; right: 8px; border-width: 2px 2px 0 0; }
+    .corner-mark.bl { bottom: 8px; left: 8px;  border-width: 0 0 2px 2px; }
+    .corner-mark.br { bottom: 8px; right: 8px; border-width: 0 2px 2px 0; }
+
+    /* Scroll to top btn */
+    #scrollTop {
+      position: fixed;
+      bottom: 2rem;
+      right: 1.5rem;
+      z-index: 999;
+      width: 44px; height: 44px;
+      background: var(--olive-dark);
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.3s;
+      font-size: 1.2rem;
+    }
+
+    #scrollTop.visible { opacity: 1; transform: translateY(0); }
+    #scrollTop:hover { background: var(--gold); color: var(--charcoal); }
+  </style>
+</head>
+<body>
+
+<!-- ============================================================
+     SCROLL-TO-TOP BUTTON
+============================================================ -->
+<button id="scrollTop" title="Kembali ke atas" onclick="window.scrollTo({top:0,behavior:'smooth'})">▲</button>
+
+<!-- ============================================================
+     NAVIGATION BAR
+============================================================ -->
+<nav id="navbar">
+  <div class="max-w-6xl mx-auto px-4 py-2 flex items-center justify-between flex-wrap gap-2">
+    <span class="font-title text-xs text-yellow-400 tracking-widest">PETA</span>
+    <div class="flex flex-wrap gap-1">
+      <a href="#sejarah"    class="nav-link">Sejarah</a>
+      <a href="#struktur"   class="nav-link">Struktur</a>
+      <a href="#tugas"      class="nav-link">Tugas</a>
+      <a href="#timeline"   class="nav-link">Perlawanan</a>
+      <a href="#akhir"      class="nav-link">Akhir</a>
+      <a href="#quiz-section" class="nav-link" style="color:var(--gold);border-color:var(--gold);">Quiz</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ============================================================
+     HERO SECTION
+============================================================ -->
+<section id="hero">
+  <!-- Placeholder logo PETA -->
+  <div class="hero-logo-ring">
+    <svg class="logo-svg" viewBox="0 0 140 140" width="140" height="140" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="70" cy="70" r="60" fill="none" stroke="#c8a94a" stroke-width="1.5" opacity="0.4"/>
+      <!-- Bintang sudut lima -->
+      <polygon points="70,20 81,53 116,53 89,73 99,106 70,86 41,106 51,73 24,53 59,53"
+               fill="none" stroke="#c8a94a" stroke-width="1.5" opacity="0.6"/>
+      <!-- Teks melingkar -->
+      <path id="circlePath" d="M 70,70 m -50,0 a 50,50 0 1,1 100,0 a 50,50 0 1,1 -100,0" fill="none"/>
+      <text font-size="10" letter-spacing="5" fill="#c8a94a" font-family="'Special Elite',cursive">
+        <textPath href="#circlePath">PEMBELA TANAH AIR · 1943 ·</textPath>
+      </text>
+      <!-- PETA besar di tengah -->
+      <text x="70" y="80" text-anchor="middle" font-size="26" font-family="'Cinzel Decorative',serif"
+            fill="#c8a94a" font-weight="700">PETA</text>
+    </svg>
+  </div>
+
+  <h1 class="hero-title">PEMBELA<br/>TANAH AIR</h1>
+  <p class="hero-subtitle">— Laskar Pejuang Kemerdekaan Indonesia —</p>
+  <p class="hero-definition">
+    Pasukan bersenjata pribumi Indonesia yang dibentuk pada era pendudukan Jepang,
+    kelak menjadi fondasi lahirnya Tentara Nasional Indonesia.
+  </p>
+  <div class="stamp mt-6">1943 — 1945</div>
+
+  <div class="scroll-indicator">
+    <span>GULIR KE BAWAH</span>
+    <span>▼</span>
+  </div>
+</section>
+
+<!-- ============================================================
+     SECTION 1: SEJARAH & LOGIKA
+============================================================ -->
+<section id="sejarah" class="parchment-bg torn-top py-16 px-4 relative">
+  <div class="corner-mark tl"></div>
+  <div class="corner-mark tr"></div>
+  <div class="corner-mark bl"></div>
+  <div class="corner-mark br"></div>
+
+  <div class="max-w-3xl mx-auto">
+    <h2 class="section-title fade-in">Sejarah &amp; Logika Pembentukan</h2>
+    <div class="section-title-line"></div>
+
+    <!-- Placeholder ilustrasi -->
+    <div class="img-placeholder rounded mb-8 fade-in" style="height:180px;">
+      <span style="font-size:2rem">🗺️</span>
+      <span>[ Ilustrasi: Peta Jawa 1943 — Wilayah Pendudukan Jepang ]</span>
+    </div>
+
+    <!-- Click-to-Reveal Cards -->
+    <div class="space-y-3 fade-in" id="sejarah-cards">
+
+      <div class="reveal-card" onclick="toggleCard(this)">
+        <div class="card-header">
+          <span class="card-question">📜 Mengapa Jepang Membentuk PETA?</span>
+          <span class="card-toggle">+</span>
+        </div>
+        <div class="card-body">
+          <p>
+            Pada September 1943, kondisi Perang Pasifik mulai berpaling dari Jepang. Angkatan perang mereka
+            kewalahan di berbagai front. Untuk mempertahankan wilayah jajahannya — termasuk Indonesia —
+            Jepang membutuhkan pasukan tambahan yang murah dan mengenal medan lokal. Solusinya:
+            merekrut dan melatih pemuda-pemuda Indonesia sebagai tentara tambahan (supplementary force).
+          </p>
+        </div>
+      </div>
+
+      <div class="reveal-card" onclick="toggleCard(this)">
+        <div class="card-header">
+          <span class="card-question">⚖️ Osamu Seirei No. 44 — Dasar Hukum Kelahiran PETA</span>
+          <span class="card-toggle">+</span>
+        </div>
+        <div class="card-body">
+          <p>
+            PETA secara resmi dibentuk melalui <strong>Osamu Seirei (Undang-undang Panglima) Nomor 44</strong>
+            yang dikeluarkan oleh Panglima Tentara ke-16 Jepang pada tanggal
+            <strong>3 Oktober 1943</strong>. Inisiatif pembentukan datang dari tokoh nasionalis Indonesia,
+            <strong>Raden Gatot Mangkoepradja</strong>, yang mengajukan permohonan langsung kepada
+            Pimpinan Tentara Jepang di Jawa. Jepang menyambut gagasan ini karena sesuai dengan kepentingan
+            strategis militer mereka.
+          </p>
+        </div>
+      </div>
+
+      <div class="reveal-card" onclick="toggleCard(this)">
+        <div class="card-header">
+          <span class="card-question">🔱 Filosofi & Makna Logo PETA</span>
+          <span class="card-toggle">+</span>
+        </div>
+        <div class="card-body">
+          <p>
+            Logo PETA menampilkan <strong>bintang bersudut lima (bintang kejora)</strong> yang melambangkan
+            cita-cita kemerdekaan dan ketuhanan. Lingkaran di luar bintang mewakili persatuan dan tekad bulat
+            para pejuang. Warna <strong>hijau</strong> melambangkan kesuburan tanah air dan harapan, sementara
+            warna <strong>merah</strong> menjadi simbol keberanian dan darah pengorbanan. Nama "Pembela Tanah Air"
+            dipilih secara taktis — memberi semangat nasional kepada rekrutan pribumi sambil tetap
+            berguna bagi kepentingan militer Jepang.
+          </p>
+        </div>
+      </div>
+
+      <div class="reveal-card" onclick="toggleCard(this)">
+        <div class="card-header">
+          <span class="card-question">🌏 Penyebaran Geografis PETA</span>
+          <span class="card-toggle">+</span>
+        </div>
+        <div class="card-body">
+          <p>
+            PETA dibentuk di seluruh wilayah yang dikuasai Tentara Ke-16 Jepang, yaitu Pulau Jawa dan Madura.
+            Di luar Jawa, organisasi serupa dibentuk dengan nama berbeda: <strong>Giyugun</strong> di Sumatera
+            (di bawah Tentara ke-25) dan <strong>Heiho</strong> yang merupakan korps pembantu militer reguler
+            tersebar di berbagai wilayah. Total anggota PETA di Jawa mencapai lebih dari
+            <strong>37.000 prajurit</strong> terbagi dalam 66 batalion (<em>daidan</em>).
+          </p>
+        </div>
+      </div>
+
+    </div><!-- /sejarah-cards -->
+  </div>
+</section>
+
+<!-- ============================================================
+     SECTION 2: STRUKTUR ORGANISASI
+============================================================ -->
+<section id="struktur" class="py-16 px-4 relative" style="background: linear-gradient(180deg, #1a1a14 0%, #2a3520 50%, #1a1a14 100%);">
+  <div class="max-w-5xl mx-auto">
+    <h2 class="section-title fade-in" style="color:var(--parchment)">
+      <span style="color:var(--gold)">✦</span> Struktur Organisasi <span style="color:var(--gold)">✦</span>
+    </h2>
+    <div class="section-title-line"></div>
+
+    <p class="font-display text-center fade-in mb-10" style="color:var(--parchment-dark); font-size:1rem; max-width:560px; margin-left:auto; margin-right:auto; line-height:1.8;">
+      Hierarki komando PETA mengadopsi sistem militer Jepang dengan istilah berbahasa Jepang.
+      Klik setiap kartu untuk informasi lebih lanjut.
+    </p>
+
+    <!-- Rank Cards Grid -->
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 fade-in">
+
+      <div class="rank-card" onclick="toggleRankInfo('rank1')">
+        <div class="rank-badge">⭐⭐⭐</div>
+        <div class="rank-title">Daidancho</div>
+        <div class="rank-translation">Komandan Batalion</div>
+        <div class="rank-desc" id="rank1" style="display:none; margin-top:0.5rem; padding-top:0.5rem; border-top:1px dashed rgba(200,169,74,0.3)">
+          Perwira tertinggi di tingkat batalion (daidan), memimpin ±500–1.000 prajurit. Jabatan ini
+          setara dengan Mayor dalam hierarki militer modern.
+        </div>
+      </div>
+
+      <div class="rank-card" onclick="toggleRankInfo('rank2')">
+        <div class="rank-badge">⭐⭐</div>
+        <div class="rank-title">Chudancho</div>
+        <div class="rank-translation">Komandan Kompi</div>
+        <div class="rank-desc" id="rank2" style="display:none; margin-top:0.5rem; padding-top:0.5rem; border-top:1px dashed rgba(200,169,74,0.3)">
+          Memimpin satu kompi (chutai) yang terdiri dari 3 peleton. Setara dengan Kapten.
+          Bertanggung jawab langsung kepada Daidancho.
+        </div>
+      </div>
+
+      <div class="rank-card" onclick="toggleRankInfo('rank3')">
+        <div class="rank-badge">⭐</div>
+        <div class="rank-title">Shodancho</div>
+        <div class="rank-translation">Komandan Peleton</div>
+        <div class="rank-desc" id="rank3" style="display:none; margin-top:0.5rem; padding-top:0.5rem; border-top:1px dashed rgba(200,169,74,0.3)">
+          Pemimpin peleton (shodan) berisi ±50 prajurit. Setara dengan Letnan. Tokoh seperti
+          Supriyadi menyandang jabatan Shodancho di Blitar.
+        </div>
+      </div>
+
+      <div class="rank-card" onclick="toggleRankInfo('rank4')">
+        <div class="rank-badge">🔰</div>
+        <div class="rank-title">Budancho</div>
+        <div class="rank-translation">Komandan Regu</div>
+        <div class="rank-desc" id="rank4" style="display:none; margin-top:0.5rem; padding-top:0.5rem; border-top:1px dashed rgba(200,169,74,0.3)">
+          Bintara pemimpin regu kecil (bundan) berisi ±13 prajurit. Jabatan non-komisioner
+          terendah yang memiliki tanggung jawab komando langsung.
+        </div>
+      </div>
+
+      <div class="rank-card" onclick="toggleRankInfo('rank5')">
+        <div class="rank-badge">🪖</div>
+        <div class="rank-title">Giyuhei</div>
+        <div class="rank-translation">Prajurit Sukarela</div>
+        <div class="rank-desc" id="rank5" style="display:none; margin-top:0.5rem; padding-top:0.5rem; border-top:1px dashed rgba(200,169,74,0.3)">
+          Anggota prajurit biasa. Mereka direkrut dari pemuda Indonesia, dilatih militer,
+          dan kelak banyak yang menjadi tulang punggung pejuang kemerdekaan 1945.
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Placeholder ilustrasi -->
+    <div class="img-placeholder rounded mt-8 fade-in" style="height:140px;">
+      <span style="font-size:2rem">🪖</span>
+      <span>[ Ilustrasi: Prajurit PETA dalam Formasi Upacara — 1944 ]</span>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================================================
+     SECTION 3: TUGAS UTAMA
+============================================================ -->
+<section id="tugas" class="parchment-bg py-16 px-4 relative">
+  <div class="max-w-3xl mx-auto">
+    <h2 class="section-title fade-in">Tugas &amp; Peran Utama PETA</h2>
+    <div class="section-title-line"></div>
+
+    <div class="img-placeholder rounded mb-8 fade-in" style="height:160px;">
+      <span style="font-size:2rem">🏝️</span>
+      <span>[ Ilustrasi: Penjagaan Pantai Utara Jawa — Posisi Pertahanan PETA ]</span>
+    </div>
+
+    <div class="space-y-3 fade-in">
+
+      <div class="reveal-card" onclick="toggleCard(this)">
+        <div class="card-header">
+          <span class="card-question">🏖️ Pertahanan Pesisir & Pantai</span>
+          <span class="card-toggle">+</span>
+        </div>
+        <div class="card-body">
+          <p>
+            Tugas utama PETA adalah mempertahankan garis pantai Jawa dari kemungkinan invasi Sekutu.
+            Mereka ditempatkan di pos-pos strategis sepanjang pantai utara dan selatan Jawa.
+            Setiap batalion bertanggung jawab atas segmen pantai tertentu, dilengkapi persenjataan
+            ringan dan senapan mesin. Patroli pesisir dilakukan secara rutin sebagai garis pertahanan
+            terdepan.
+          </p>
+        </div>
+      </div>
+
+      <div class="reveal-card" onclick="toggleCard(this)">
+        <div class="card-header">
+          <span class="card-question">🔍 Intelijen & Kontra-Spionase</span>
+          <span class="card-toggle">+</span>
+        </div>
+        <div class="card-body">
+          <p>
+            PETA dimanfaatkan Jepang untuk mengumpulkan intelijen lokal. Prajurit PETA yang berasal
+            dari komunitas setempat memiliki akses ke jaringan informasi yang tidak dimiliki tentara
+            Jepang. Namun, saluran intelijen ini juga menjadi cara bagi para pemimpin PETA untuk
+            membangun jaringan gerakan bawah tanah pro-kemerdekaan Indonesia secara diam-diam.
+          </p>
+        </div>
+      </div>
+
+      <div class="reveal-card" onclick="toggleCard(this)">
+        <div class="card-header">
+          <span class="card-question">🛡️ Keamanan Dalam Negeri & Ketertiban</span>
+          <span class="card-toggle">+</span>
+        </div>
+        <div class="card-body">
+          <p>
+            Di samping tugas militer, PETA juga berfungsi menjaga ketertiban sipil, mengawal
+            transportasi penting, dan menjaga fasilitas vital seperti gudang pangan, instalasi
+            komunikasi, dan jalur kereta api yang strategis. Mereka menjadi "polisi militer" lokal
+            di bawah supervisi perwira Jepang.
+          </p>
+        </div>
+      </div>
+
+      <div class="reveal-card" onclick="toggleCard(this)">
+        <div class="card-header">
+          <span class="card-question">💡 Dampak Tak Terduga: Lahirnya Militer Nasional</span>
+          <span class="card-toggle">+</span>
+        </div>
+        <div class="card-body">
+          <p>
+            Ironisnya, Jepang tanpa sadar menciptakan benih kehancuran penjajahannya sendiri.
+            Melalui latihan militer PETA, ribuan pemuda Indonesia memperoleh keterampilan tempur,
+            disiplin militer, dan jaringan kepemimpinan. Tokoh-tokoh seperti <strong>Soedirman</strong>
+            (Panglima Besar pertama TNI), <strong>Abdul Haris Nasution</strong>, dan banyak jenderal
+            lainnya adalah mantan perwira PETA yang kemudian memimpin perjuangan kemerdekaan.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SECTION 4: TIMELINE PERLAWANAN
+============================================================ -->
+<section id="timeline" class="py-16 px-4" style="background: linear-gradient(180deg, #0d1a0a 0%, #1e2b16 100%);">
+  <div class="max-w-3xl mx-auto">
+    <h2 class="section-title fade-in" style="color:var(--parchment)">
+      <span style="color:var(--gold)">✦</span> Timeline Perlawanan <span style="color:var(--gold)">✦</span>
+    </h2>
+    <div class="section-title-line"></div>
+
+    <p class="font-display text-center fade-in mb-10" style="color:var(--parchment-dark); font-size:0.95rem; max-width:520px; margin:0 auto 2.5rem; line-height:1.8;">
+      Klik setiap peristiwa untuk membaca kisah lengkap perlawanan para pejuang PETA.
+    </p>
+
+    <div class="timeline-container fade-in">
+
+      <!-- Aceh -->
+      <div class="timeline-item" onclick="toggleTimeline(this)">
+        <div class="timeline-dot"></div>
+        <div class="timeline-header">
+          <div class="timeline-year">NOVEMBER 1944</div>
+          <div class="timeline-event">Perlawanan PETA di Aceh</div>
+        </div>
+        <div class="timeline-body">
+          <p>
+            Di Aceh, perlawanan bersenjata meletus di bawah pimpinan <strong>Teuku Hamid</strong>.
+            Dipicu oleh kekejaman romusha (kerja paksa) yang memaksa warga Aceh bekerja dalam kondisi
+            brutal, para pejuang PETA setempat bergabung dengan ulama dan rakyat dalam pemberontakan
+            terhadap garnisun Jepang. Walaupun dapat dipadamkan, perlawanan ini menyulut semangat
+            perlawanan di seluruh wilayah Sumatra Utara dan memperkuat jaringan bawah tanah
+            pro-kemerdekaan.
+          </p>
+        </div>
+      </div>
+
+      <!-- Singaparna -->
+      <div class="timeline-item" onclick="toggleTimeline(this)">
+        <div class="timeline-dot"></div>
+        <div class="timeline-header">
+          <div class="timeline-year">FEBRUARI 1944</div>
+          <div class="timeline-event">Pemberontakan Singaparna — Jawa Barat</div>
+        </div>
+        <div class="timeline-body">
+          <p>
+            Dipimpin <strong>K.H. Zainal Mustofa</strong>, seorang ulama berpengaruh dari pesantren
+            Sukamanah, Singaparna. Pemicu utama adalah penolakan tegas terhadap <em>Seikerei</em>
+            (ritual membungkuk menghadap Tokyo sebagai penghormatan kepada Kaisar Jepang), yang
+            dianggap musyrik oleh umat Islam. Para santri dan anggota PETA lokal bersatu mengangkat
+            senjata. Jepang berhasil memadamkan pemberontakan dan K.H. Zainal Mustofa dieksekusi,
+            namun ia kemudian diakui sebagai Pahlawan Nasional Indonesia.
+          </p>
+        </div>
+      </div>
+
+      <!-- Indramayu -->
+      <div class="timeline-item" onclick="toggleTimeline(this)">
+        <div class="timeline-dot"></div>
+        <div class="timeline-header">
+          <div class="timeline-year">APRIL 1944</div>
+          <div class="timeline-event">Perlawanan Indramayu — Jawa Barat</div>
+        </div>
+        <div class="timeline-body">
+          <p>
+            Perlawanan di Indramayu berakar dari penderitaan rakyat akibat pengambilan paksa hasil
+            panen padi oleh Jepang di tengah kelaparan massal. Para petani, yang beberapa di antaranya
+            adalah kerabat prajurit PETA, mulai bersenjata secara spontan. Koneksi antara anggota
+            PETA dengan rakyat sipil terbukti menjadi katalis penting, menunjukkan betapa
+            kesetiaan prajurit PETA pada tanah air jauh lebih kuat daripada kepada para pengendali
+            Jepang mereka.
+          </p>
+        </div>
+      </div>
+
+      <!-- BLITAR — Featured -->
+      <div class="timeline-item" onclick="toggleTimeline(this)">
+        <div class="timeline-dot" style="background: var(--gold); width:20px; height:20px; left:-1.85rem; top:0.85rem;"></div>
+        <div class="timeline-header" style="border-left: 4px solid var(--gold); background: linear-gradient(135deg, rgba(245,236,208,0.98), rgba(200,169,74,0.12));">
+          <div class="timeline-year" style="color:var(--gold)">14 FEBRUARI 1945 ⭐ TERBESAR</div>
+          <div class="timeline-event" style="font-size:1.1rem;">Pemberontakan Blitar — "Valentine Merah"</div>
+        </div>
+        <div class="timeline-body">
+          <p>
+            <strong>Pemberontakan terbesar PETA sepanjang sejarah.</strong> Dipimpin oleh
+            <strong>Shodancho Supriyadi</strong>, komandan peleton berusia 21 tahun dari Batalion
+            Blitar. Tengah malam tanggal 14 Februari 1945, ratusan prajurit PETA Blitar mengangkat
+            senjata, menduduki kota, dan menyerang markas Jepang. Motivasi mereka: kemarahan atas
+            sistem romusha yang menyiksa rakyat, eksploitasi pangan, dan perlakuan merendahkan
+            dari instruktur militer Jepang.
+            <br/><br/>
+            Jepang menghadapi pemberontakan ini dengan kekuatan penuh — infanteri, artileri,
+            dan pesawat udara. Dalam waktu beberapa hari, pemberontakan berhasil dipadamkan.
+            Beberapa pemimpin ditangkap dan dieksekusi. Nasib Supriyadi sendiri hingga kini
+            menjadi misteri sejarah — ada yang meyakini ia terbunuh, ada pula yang percaya
+            ia berhasil melarikan diri ke hutan dan terus berjuang. Supriyadi kemudian dikenang
+            sebagai <strong>Pahlawan Nasional</strong> oleh pemerintah Indonesia.
+          </p>
+        </div>
+      </div>
+
+    </div><!-- /timeline-container -->
+  </div>
+</section>
+
+<!-- ============================================================
+     SECTION 5: AKHIR PERJUANGAN
+============================================================ -->
+<section id="akhir" class="parchment-bg torn-top py-16 px-4 relative">
+  <div class="corner-mark tl"></div>
+  <div class="corner-mark br"></div>
+
+  <div class="max-w-3xl mx-auto">
+    <h2 class="section-title fade-in">Akhir Perjuangan &amp; Warisan PETA</h2>
+    <div class="section-title-line"></div>
+
+    <div class="img-placeholder rounded mb-8 fade-in" style="height:160px;">
+      <span style="font-size:2rem">🎖️</span>
+      <span>[ Ilustrasi: Proklamasi Kemerdekaan 17 Agustus 1945 — Warisan PETA ]</span>
+    </div>
+
+    <div class="space-y-3 fade-in">
+
+      <div class="reveal-card" onclick="toggleCard(this)">
+        <div class="card-header">
+          <span class="card-question">📅 Kapan & Mengapa PETA Dibubarkan?</span>
+          <span class="card-toggle">+</span>
+        </div>
+        <div class="card-body">
+          <p>
+            Setelah bom atom dijatuhkan di Hiroshima (6 Agustus) dan Nagasaki (9 Agustus 1945),
+            Jepang menyerah kepada Sekutu tanggal 15 Agustus 1945. Menyusul proklamasi kemerdekaan
+            Indonesia tanggal 17 Agustus 1945, Jepang secara resmi membubarkan PETA pada
+            <strong>18 Agustus 1945</strong> — sehari setelah proklamasi. Pembubaran ini adalah
+            syarat yang dituntut Sekutu dari Jepang untuk menyerahkan semua kekuatan militer
+            di wilayah jajahannya.
+          </p>
+        </div>
+      </div>
+
+      <div class="reveal-card" onclick="toggleCard(this)">
+        <div class="card-header">
+          <span class="card-question">⚔️ Dari PETA Menuju BKR & TKR</span>
+          <span class="card-toggle">+</span>
+        </div>
+        <div class="card-body">
+          <p>
+            Meski dibubarkan secara formal, semangat dan personel PETA tidak menghilang begitu saja.
+            Para mantan prajurit dan perwira PETA segera bergabung ke dalam
+            <strong>Badan Keamanan Rakyat (BKR)</strong> yang dibentuk tanggal 22 Agustus 1945,
+            lalu bertransformasi menjadi <strong>Tentara Keamanan Rakyat (TKR)</strong> pada
+            5 Oktober 1945 — yang kini diperingati sebagai <em>Hari TNI</em>. PETA adalah embrio
+            sejati dari Tentara Nasional Indonesia.
+          </p>
+        </div>
+      </div>
+
+      <div class="reveal-card" onclick="toggleCard(this)">
+        <div class="card-header">
+          <span class="card-question">🌟 Warisan PETA Bagi Indonesia</span>
+          <span class="card-toggle">+</span>
+        </div>
+        <div class="card-body">
+          <p>
+            Warisan PETA jauh melampaui eksistensi formalnya yang hanya dua tahun. Ia mewariskan:
+            <br/><br/>
+            <strong>1. Kader militer profesional</strong> — perwira PETA membawa disiplin, taktik,
+            dan pengalaman tempur nyata ke dalam pasukan kemerdekaan.<br/><br/>
+            <strong>2. Semangat nasionalisme bersenjata</strong> — pemberontakan PETA membuktikan
+            bahwa bangsa Indonesia tidak takut mengangkat senjata demi kemerdekaan.<br/><br/>
+            <strong>3. Pahlawan Nasional</strong> — Supriyadi, K.H. Zainal Mustofa, dan banyak
+            pejuang PETA lainnya diabadikan sebagai pahlawan nasional Indonesia.<br/><br/>
+            <strong>4. Fondasi TNI</strong> — Jenderal Soedirman, Nasution, dan pemimpin militer
+            Indonesia paling berpengaruh adalah produk PETA.
+          </p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="text-center mt-10 fade-in">
+      <div class="stamp" style="transform: rotate(-2deg); display: inline-block;">
+        "Mereka berperang bukan untuk Jepang — mereka berperang untuk Indonesia."
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SECTION 6: QUIZ INTERAKTIF
+============================================================ -->
+<section id="quiz-section">
+  <div class="max-w-3xl mx-auto" style="position:relative; z-index:1">
+    <h2 class="section-title fade-in" style="color:var(--parchment)">
+      <span style="color:var(--gold)">✦</span> Quiz Pengetahuan PETA <span style="color:var(--gold)">✦</span>
+    </h2>
+    <div class="section-title-line"></div>
+    <p class="font-display text-center fade-in mb-8" style="color:var(--parchment-dark); font-size:0.95rem; max-width:480px; margin:0 auto 2rem;">
+      Uji pemahamanmu dengan 10 soal tentang PETA. Soal diacak setiap sesi!
+    </p>
+
+    <div class="quiz-container fade-in">
+      <!-- Progress Bar -->
+      <div class="quiz-progress-bar">
+        <div class="quiz-progress-fill" id="quizProgress" style="width:0%"></div>
+      </div>
+
+      <!-- Quiz Questions -->
+      <div id="quiz-questions">
+        <div class="quiz-question-num" id="questionNum">Soal 1 dari 10</div>
+        <div class="quiz-question-text" id="questionText"></div>
+        <div id="optionsContainer"></div>
+        <div class="quiz-feedback" id="quizFeedback"></div>
+        <button class="btn-next" id="btnNext" onclick="nextQuestion()">Lanjut →</button>
+      </div>
+
+      <!-- Quiz Result -->
+      <div id="quiz-result">
+        <div class="result-score" id="resultScore"></div>
+        <div class="result-message" id="resultMessage"></div>
+        <button class="btn-reset" onclick="resetQuiz()">🔄 Ulangi Quiz</button>
+      </div>
+    </div><!-- /quiz-container -->
+  </div>
+</section>
+
+<!-- ============================================================
+     FOOTER
+============================================================ -->
+<footer>
+  <p style="margin-bottom:0.5rem; font-size:0.85rem; color:var(--gold); letter-spacing:0.1em;">
+    PETA — PEMBELA TANAH AIR
+  </p>
+  <p>1943 – 1945 · Fondasi Tentara Nasional Indonesia</p>
+  <p style="margin-top:0.5rem; font-size:0.65rem; opacity:0.5;">
+    Media Edukasi Sejarah · Dibuat dengan semangat mengenang para pahlawan bangsa
+  </p>
+</footer>
+
+<!-- ============================================================
+     JAVASCRIPT
+============================================================ -->
+<script>
+  /* =============================================================
+     1. TOGGLE REVEAL CARD (Click-to-Reveal)
+  ============================================================= */
+  function toggleCard(el) {
+    const wasOpen = el.classList.contains('open');
+    // Tutup semua kartu dalam container yang sama
+    el.closest('[id$="-cards"], .space-y-3')
+      ?.querySelectorAll('.reveal-card')
+      .forEach(c => c.classList.remove('open'));
+    // Toggle kartu yang diklik
+    if (!wasOpen) el.classList.add('open');
+  }
+
+  /* =============================================================
+     2. TOGGLE RANK INFO
+  ============================================================= */
+  function toggleRankInfo(id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const isShown = el.style.display !== 'none';
+    // Tutup semua rank info
+    document.querySelectorAll('[id^="rank"]').forEach(r => r.style.display = 'none');
+    if (!isShown) el.style.display = 'block';
+  }
+
+  /* =============================================================
+     3. TOGGLE TIMELINE
+  ============================================================= */
+  function toggleTimeline(el) {
+    const wasOpen = el.classList.contains('open');
+    document.querySelectorAll('.timeline-item').forEach(i => i.classList.remove('open'));
+    if (!wasOpen) el.classList.add('open');
+  }
+
+  /* =============================================================
+     4. SCROLL ANIMATIONS (IntersectionObserver)
+  ============================================================= */
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.fade-in').forEach(el => io.observe(el));
+
+  /* =============================================================
+     5. SCROLL-TO-TOP BUTTON
+  ============================================================= */
+  window.addEventListener('scroll', () => {
+    document.getElementById('scrollTop')
+      .classList.toggle('visible', window.scrollY > 400);
+  });
+
+  /* =============================================================
+     6. QUIZ SYSTEM
+  ============================================================= */
+
+  // --- Data Bank Soal (10 soal) ---
+  const QUIZ_BANK = [
+    {
+      q: "PETA (Pembela Tanah Air) secara resmi dibentuk melalui peraturan militer Jepang yang disebut...",
+      opts: ["Osamu Seirei No. 44", "Dai Nippon Iku No. 17", "Gunseikan Ordinance No. 9", "Nippon Seirei No. 1"],
+      ans: 0,
+      exp: "PETA dibentuk melalui Osamu Seirei (Undang-undang Panglima) Nomor 44 pada tanggal 3 Oktober 1943."
+    },
+    {
+      q: "Siapakah tokoh nasionalis Indonesia yang mengajukan inisiatif pembentukan PETA kepada pimpinan militer Jepang?",
+      opts: ["Sukarno", "Raden Gatot Mangkoepradja", "Ki Hajar Dewantara", "Hatta"],
+      ans: 1,
+      exp: "Raden Gatot Mangkoepradja mengajukan permohonan pembentukan PETA langsung kepada Panglima Tentara ke-16 Jepang di Jawa."
+    },
+    {
+      q: "Jabatan 'Daidancho' dalam struktur organisasi PETA setara dengan pangkat militer modern...",
+      opts: ["Letnan", "Kapten", "Mayor / Komandan Batalion", "Jenderal"],
+      ans: 2,
+      exp: "Daidancho adalah Komandan Batalion (daidan), setara dengan pangkat Mayor dalam hierarki militer modern."
+    },
+    {
+      q: "Pemberontakan PETA yang terbesar terjadi di kota mana pada tanggal 14 Februari 1945?",
+      opts: ["Surabaya", "Bandung", "Blitar", "Semarang"],
+      ans: 2,
+      exp: "Pemberontakan terbesar PETA terjadi di Blitar, Jawa Timur, dipimpin Shodancho Supriyadi pada 14 Februari 1945."
+    },
+    {
+      q: "Siapakah pemimpin Pemberontakan PETA di Blitar yang kemudian diakui sebagai Pahlawan Nasional?",
+      opts: ["Jenderal Soedirman", "K.H. Zainal Mustofa", "Shodancho Supriyadi", "Teuku Hamid"],
+      ans: 2,
+      exp: "Shodancho Supriyadi adalah pemimpin pemberontakan Blitar. Nasibnya menjadi misteri sejarah dan ia diakui sebagai Pahlawan Nasional."
+    },
+    {
+      q: "Pemberontakan PETA di Singaparna (Jawa Barat) dipimpin oleh seorang ulama bernama...",
+      opts: ["K.H. Hasyim Asy'ari", "K.H. Zainal Mustofa", "K.H. Ahmad Dahlan", "K.H. Agus Salim"],
+      ans: 1,
+      exp: "K.H. Zainal Mustofa, ulama dari pesantren Sukamanah, memimpin pemberontakan di Singaparna yang dipicu penolakan terhadap ritual Seikerei."
+    },
+    {
+      q: "Salah satu alasan utama pemberontakan-pemberontakan PETA adalah kemarahan atas sistem kerja paksa yang disebut...",
+      opts: ["Tanam Paksa", "Romusha", "Kerja Rodi", "Cultuurstelsel"],
+      ans: 1,
+      exp: "Romusha adalah sistem kerja paksa yang diterapkan Jepang. Penderitaan rakyat akibat romusha menjadi pemantik utama perlawanan PETA."
+    },
+    {
+      q: "Setelah proklamasi kemerdekaan, PETA dibubarkan oleh Jepang pada tanggal...",
+      opts: ["17 Agustus 1945", "18 Agustus 1945", "22 Agustus 1945", "5 Oktober 1945"],
+      ans: 1,
+      exp: "PETA secara resmi dibubarkan pada 18 Agustus 1945 — sehari setelah proklamasi kemerdekaan 17 Agustus 1945."
+    },
+    {
+      q: "Mantan perwira PETA yang menjadi Panglima Besar pertama Tentara Nasional Indonesia adalah...",
+      opts: ["Abdul Haris Nasution", "A.H. Nasution", "Jenderal Soedirman", "Sri Sultan Hamengkubuwono IX"],
+      ans: 2,
+      exp: "Jenderal Soedirman, mantan perwira PETA, terpilih sebagai Panglima Besar pertama TKR/TNI dalam sidang pemilihan tanggal 12 November 1945."
+    },
+    {
+      q: "Hari jadi TNI (5 Oktober) berkaitan langsung dengan pembentukan organisasi penerus PETA yang bernama...",
+      opts: ["BKR (Badan Keamanan Rakyat)", "TKR (Tentara Keamanan Rakyat)", "KNIL (Koninklijk Nederlandsch-Indisch Leger)", "Laskar Rakyat"],
+      ans: 1,
+      exp: "TKR (Tentara Keamanan Rakyat) dibentuk pada 5 Oktober 1945 — kini diperingati sebagai Hari TNI. TKR adalah transformasi dari BKR yang banyak diisi mantan prajurit PETA."
+    }
+  ];
+
+  // --- State Quiz ---
+  let quizQuestions = [];
+  let currentQ = 0;
+  let score = 0;
+  let answered = false;
+
+  // --- Shuffle Function (Fisher-Yates) ---
+  function shuffleArr(arr) {
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  // --- Initialize Quiz ---
+  function initQuiz() {
+    quizQuestions = shuffleArr(QUIZ_BANK);
+    currentQ = 0;
+    score = 0;
+    answered = false;
+
+    document.getElementById('quiz-questions').style.display = 'block';
+    document.getElementById('quiz-result').classList.remove('show');
+    document.getElementById('quizFeedback').className = 'quiz-feedback';
+    document.getElementById('btnNext').classList.remove('show');
+
+    renderQuestion();
+  }
+
+  // --- Render Current Question ---
+  function renderQuestion() {
+    const q = quizQuestions[currentQ];
+    const total = quizQuestions.length;
+    answered = false;
+
+    // Update UI
+    document.getElementById('questionNum').textContent = `Soal ${currentQ + 1} dari ${total}`;
+    document.getElementById('questionText').textContent = q.q;
+    document.getElementById('quizProgress').style.width = `${(currentQ / total) * 100}%`;
+    document.getElementById('quizFeedback').className = 'quiz-feedback';
+    document.getElementById('btnNext').classList.remove('show');
+
+    // Build options
+    const container = document.getElementById('optionsContainer');
+    container.innerHTML = '';
+    const labels = ['A', 'B', 'C', 'D'];
+    q.opts.forEach((opt, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'quiz-option';
+      btn.textContent = `${labels[i]}. ${opt}`;
+      btn.onclick = () => selectOption(i, btn);
+      container.appendChild(btn);
+    });
+  }
+
+  // --- Handle Option Selection ---
+  function selectOption(index, btnEl) {
+    if (answered) return;
+    answered = true;
+
+    const q = quizQuestions[currentQ];
+    const allBtns = document.querySelectorAll('.quiz-option');
+    allBtns.forEach(b => b.disabled = true);
+
+    const feedback = document.getElementById('quizFeedback');
+
+    if (index === q.ans) {
+      score++;
+      btnEl.classList.add('correct');
+      feedback.textContent = `✅ Benar! ${q.exp}`;
+      feedback.className = 'quiz-feedback correct show';
+    } else {
+      btnEl.classList.add('wrong');
+      allBtns[q.ans].classList.add('correct');
+      feedback.textContent = `❌ Kurang tepat. ${q.exp}`;
+      feedback.className = 'quiz-feedback wrong show';
+    }
+
+    document.getElementById('btnNext').classList.add('show');
+  }
+
+  // --- Next Question ---
+  function nextQuestion() {
+    currentQ++;
+    if (currentQ >= quizQuestions.length) {
+      showResult();
+    } else {
+      renderQuestion();
+    }
+  }
+
+  // --- Show Result ---
+  function showResult() {
+    document.getElementById('quiz-questions').style.display = 'none';
+    document.getElementById('quizProgress').style.width = '100%';
+
+    const result = document.getElementById('quiz-result');
+    result.classList.add('show');
+
+    const total = quizQuestions.length;
+    const pct = Math.round((score / total) * 100);
+
+    document.getElementById('resultScore').textContent = `${score} / ${total}`;
+
+    let msg = '';
+    if (pct === 100) {
+      msg = `🇮🇩 <strong>Luar Biasa, Pahlawan!</strong><br/>Nilai sempurna! Pengetahuanmu tentang PETA setajam pedang pejuang Blitar. Semangat para pembela tanah air ini hidup dalam ingatanmu!`;
+    } else if (pct >= 70) {
+      msg = `🎖️ <strong>Pejuang Tangguh!</strong><br/>Skor yang membanggakan. Kamu memahami perjuangan PETA dengan baik. Terus perdalam semangatmu untuk mengenal sejarah bangsamu!`;
+    } else if (pct >= 40) {
+      msg = `📜 <strong>Prajurit Dalam Latihan!</strong><br/>Cukup baik, namun masih ada yang perlu dipelajari. Baca kembali materi di atas, karena sejarah perjuangan ini layak untuk diingat!`;
+    } else {
+      msg = `🔍 <strong>Rekrutan Baru!</strong><br/>Jangan menyerah — bahkan Giyuhei harus berlatih keras sebelum menjadi pejuang sejati. Pelajari kembali dan buktikan semangatmu!`;
+    }
+
+    document.getElementById('resultMessage').innerHTML = msg;
+  }
+
+  // --- Reset Quiz ---
+  function resetQuiz() {
+    initQuiz();
+  }
+
+  // --- Start Quiz on Load ---
+  document.addEventListener('DOMContentLoaded', initQuiz);
+
+  /* =============================================================
+     7. ACTIVE NAV HIGHLIGHT (Scrollspy)
+  ============================================================= */
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-link');
+
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(sec => {
+      if (window.scrollY >= sec.offsetTop - 120) current = sec.id;
+    });
+    navLinks.forEach(link => {
+      link.style.color = link.getAttribute('href') === `#${current}`
+        ? 'var(--gold)'
+        : 'var(--parchment)';
+    });
+  });
+
+</script>
+</body>
+</html>
